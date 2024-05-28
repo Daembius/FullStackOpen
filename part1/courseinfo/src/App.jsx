@@ -1,51 +1,63 @@
 const Header = (props) => {
-    return (
+  return (
     <div>
       <h1>{props.course}</h1>
     </div>
-  )
-}
+  );
+};
 
-function Part (props) {
+function Part(props) {
   return (
-    <p>{props.name} <span>{props.exercises}</span></p>
-  )
+    <p>
+      {props.name} <span>{props.exercises}</span>
+    </p>
+  );
 }
 
 function Content(props) {
   return (
     <div>
-      <Part name={props.content[0].name} exercises={props.content[0].exercises}/>
-      <Part name={props.content[1].name} exercises={props.content[1].exercises}/>
-      <Part name={props.content[2].name} exercises={props.content[2].exercises}/>
+      <Part
+        name={props.content[0].name}
+        exercises={props.content[0].exercises}
+      />
+      <Part
+        name={props.content[1].name}
+        exercises={props.content[1].exercises}
+      />
+      <Part
+        name={props.content[2].name}
+        exercises={props.content[2].exercises}
+      />
     </div>
-  )
+  );
 }
 
-//  const Total = (props) => {
-//   let Total = {props.content[0]exercises + props.content[1].exercises + props.content[2].exercises}
-//   return (
-
-//   )
-// }
+const Total = (props) => {
+  let total = props.content[0].exercises + props.content[1].exercises + props.content[2].exercises
+  console.log(total);
+  return (
+<p><strong>Number of exercises: </strong>{props.content[0].exercises + props.content[1].exercises + props.content[2].exercises}</p>
+  )
+};
 
 const App = () => {
-  const course = 'Half Stack application development'
+  const course = "Half Stack application development";
   const content = [
     {
       name: "Fundamentals of React",
-      exercises: 10
+      exercises: 10,
     },
     {
       name: "Using props to pass data",
-      exercises: 7
+      exercises: 7,
     },
     {
       name: "State of a component",
-      exercises: 14
-    }
-  ]
-  
+      exercises: 14,
+    },
+  ];
+
   // const part1 = 'Fundamentals of React'
   // const exercises1 = 10
   // const part2 = 'Using props to pass data'
@@ -56,7 +68,8 @@ const App = () => {
   return (
     <div>
       <Header course={course} />
-      <Content content={content}/>
+      <Content content={content} />
+      <Total content={content} />
       {/* <Content part1={part1} exercises1={exercises1} /> */}
       {/* <h1>{course}</h1>
       <p>
@@ -70,7 +83,7 @@ const App = () => {
       </p>
       <p>Number of exercises {exercises1 + exercises2 + exercises3}</p> */}
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

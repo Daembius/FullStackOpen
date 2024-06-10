@@ -1,17 +1,26 @@
+import { useState } from "react";
+
+const Display = (props) => {
+  return <div>{props.counter}</div>;
+};
+
+const Button = (props) => {
+  return <button onClick={props.onClick}>{props.text}</button>;
+};
+
 const App = () => {
-  const friends = [
-    { name: "Peter", age: 4 },
-    { name: "Maya", age: 10 },
-  ];
+  const [counter, setCounter] = useState(0);
+
+  const increaseByOne = () => setCounter(counter + 1);
+  const decreaseByOne = () => setCounter(counter - 1);
+  const setToZero = () => setCounter(0);
 
   return (
     <div>
-      <p>
-        {friends[0].name} {friends[0].age}
-      </p>
-      <p>
-        {friends[1].name} {friends[1].age}
-      </p>
+      <Display counter={counter} />
+      <button onClick={increaseByOne} text="plus" />
+      <button onClick={setToZero} text="zero" />
+      <button onClick={decreaseByOne} text="minus" />
     </div>
   );
 };

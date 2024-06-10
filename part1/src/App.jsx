@@ -18,9 +18,9 @@ const App = () => {
   return (
     <div>
       <Display counter={counter} />
-      <button onClick={increaseByOne} text="plus" />
-      <button onClick={setToZero} text="zero" />
-      <button onClick={decreaseByOne} text="minus" />
+      <Button onClick={increaseByOne} text="plus" />
+      <Button onClick={setToZero} text="zero" />
+      <Button onClick={decreaseByOne} text="minus" />
     </div>
   );
 };

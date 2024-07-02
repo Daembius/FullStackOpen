@@ -1,5 +1,21 @@
 import { useState } from "react";
 
+const Statistics = (props) => {
+  // Refactor your application so that displaying the
+  // statistics is extracted into its own Statistics component.
+  // The state of the application should remain in the App root component.
+  return (
+    <div>
+      <p>good {props.good}</p>
+      <p>neutral {props.neutral}</p>
+      <p>bad {props.bad}</p>
+      <p>all {props.all}</p>
+      <p>average {props.average}</p>
+      <p>positive {props.positive}</p>
+    </div>
+  );
+};
+
 const Button = (props) => (
   <button onClick={props.handleClick}>{props.text}</button>
 );
@@ -9,9 +25,11 @@ const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
+  console.log("good", good, "neutral", neutral, "bad", bad);
   const all = good + neutral + bad;
-  const average = (good - bad) / all;
-  const positive = 100 * good / all;
+  const average = !isNaN((good - bad) / all) ? (good - bad) / all : 0;
+  const positive = !isNaN((100 * good) / all) ? (100 * good) / all : 0;
+  console.log("all", all, "average", average, "positive", positive);
 
   return (
     <div>
@@ -20,12 +38,8 @@ const App = () => {
       <Button handleClick={() => setNeutral(neutral + 1)} text="neutral" />
       <Button handleClick={() => setBad(bad + 1)} text="bad" />
       <h1>statistics</h1>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {all}</p>
-      <p>average {average}</p>
-      <p>positive {positive}</p>
+      <Statistics good={good} neutral={neutral} bad={bad} 
+      all={all} average={average} positive={positive} />
     </div>
   );
 };

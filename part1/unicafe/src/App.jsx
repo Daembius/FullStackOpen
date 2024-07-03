@@ -1,25 +1,31 @@
 import { useState } from "react";
 
-// extract statistics into its own component
+
+// Display a single statistic 
+const StatisticLine = ({ text, value }) => (
+  <p>{text} {value}</p>
+);
+
+
 const Statistics = ({ good, neutral, bad }) => {
   const all = good + neutral + bad;
 
   if (all === 0) {
     return <p>No feedback given</p>;
   }
-  const average = (good - bad) / all.toFixed(1);
-  const positive = (100 * good) / all.toFixed(1);
+  const average = (good - bad) / all;
+  const positive = (100 * good) / all;
 
   console.log("all", all, "average", average, "positive", positive);
 
   return (
     <div>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {all}</p>
-      <p>average {average}</p>
-      <p>positive {positive}%</p>
+      <StatisticLine text="good" value={good}/>
+      <StatisticLine text="neutral" value={neutral}/>
+      <StatisticLine text="bad" value={bad}/>
+      <StatisticLine text="all" value={all}/>
+      <StatisticLine text="average" value={average.toFixed(1)}/>
+      <StatisticLine text="positive" value={positive.toFixed(1) + "%"}/>
     </div>
   );
 };

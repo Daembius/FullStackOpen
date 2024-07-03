@@ -1,23 +1,22 @@
 import { useState } from "react";
 
-const Statistics = (props) => {
-  // Refactor your application so that displaying the
-  // statistics is extracted into its own Statistics component.
-  // The state of the application should remain in the App root component.
+// extract statistics into its own component
+const Statistics = ({ good, neutral, bad, all, average, positive }) => {
   return (
     <div>
-      <p>good {props.good}</p>
-      <p>neutral {props.neutral}</p>
-      <p>bad {props.bad}</p>
-      <p>all {props.all}</p>
-      <p>average {props.average}</p>
-      <p>positive {props.positive}</p>
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
+      <p>all {all}</p>
+      <p>average {average}</p>
+      <p>positive {positive}%</p>
     </div>
   );
 };
 
-const Button = (props) => (
-  <button onClick={props.handleClick}>{props.text}</button>
+// Refactor Button component using destructuring
+const Button = ({ handleClick, text }) => (
+  <button onClick={handleClick}>{text}</button>
 );
 
 const App = () => {
@@ -26,9 +25,12 @@ const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
   console.log("good", good, "neutral", neutral, "bad", bad);
+
   const all = good + neutral + bad;
-  const average = !isNaN((good - bad) / all) ? (good - bad) / all : 0;
-  const positive = !isNaN((100 * good) / all) ? (100 * good) / all : 0;
+
+  const average = all !== 0 ? (good - bad) / all : 0;
+  const positive = all !== 0 ? (100 * good) / all : 0;
+
   console.log("all", all, "average", average, "positive", positive);
 
   return (
@@ -38,8 +40,14 @@ const App = () => {
       <Button handleClick={() => setNeutral(neutral + 1)} text="neutral" />
       <Button handleClick={() => setBad(bad + 1)} text="bad" />
       <h1>statistics</h1>
-      <Statistics good={good} neutral={neutral} bad={bad} 
-      all={all} average={average} positive={positive} />
+      <Statistics
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        all={all}
+        average={average}
+        positive={positive}
+      />
     </div>
   );
 };

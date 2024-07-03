@@ -1,7 +1,13 @@
 import { useState } from "react";
 
 // extract statistics into its own component
-const Statistics = ({ good, neutral, bad, all, average, positive }) => {
+const Statistics = ({ good, neutral, bad }) => {
+  const all = good + neutral + bad;
+  const average = all !== 0 ? ((good - bad) / all).toFixed(1) : 0;
+  const positive = all !== 0 ? ((100 * good) / all).toFixed(1) : 0;
+
+  console.log("all", all, "average", average, "positive", positive);
+
   return (
     <div>
       <p>good {good}</p>
@@ -26,13 +32,6 @@ const App = () => {
   const [bad, setBad] = useState(0);
   console.log("good", good, "neutral", neutral, "bad", bad);
 
-  const all = good + neutral + bad;
-
-  const average = all !== 0 ? (good - bad) / all : 0;
-  const positive = all !== 0 ? (100 * good) / all : 0;
-
-  console.log("all", all, "average", average, "positive", positive);
-
   return (
     <div>
       <h1>give feedback</h1>
@@ -40,14 +39,7 @@ const App = () => {
       <Button handleClick={() => setNeutral(neutral + 1)} text="neutral" />
       <Button handleClick={() => setBad(bad + 1)} text="bad" />
       <h1>statistics</h1>
-      <Statistics
-        good={good}
-        neutral={neutral}
-        bad={bad}
-        all={all}
-        average={average}
-        positive={positive}
-      />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   );
 };

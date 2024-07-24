@@ -14,6 +14,10 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
+    if (newName.trim() === '' || newNumber.trim() === '') {
+      alert("Name and number are required");
+      return;
+    }
     const personObject = {
       name: newName,
       number: newNumber,

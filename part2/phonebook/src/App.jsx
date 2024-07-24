@@ -4,8 +4,11 @@ import { useState } from "react";
 // import './App.css'
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas", id: 0 }]);
+  const [persons, setPersons] = useState([
+    { name: "Arto Hellas", number: 777777, id: 0 },
+  ]);
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
 
   const [counter, setCounter] = useState(1);
 
@@ -13,6 +16,7 @@ const App = () => {
     event.preventDefault();
     const personObject = {
       name: newName,
+      number: newNumber,
       id: counter,
     };
 
@@ -23,15 +27,21 @@ const App = () => {
     ) {
       setPersons(persons.concat(personObject));
       setNewName("");
+      setNewNumber("");
       setCounter(counter + 1);
     } else {
       alert(`${newName} is already added to phonebook`);
       setNewName("");
+      setNewNumber("");
     }
   };
 
   const handlePersonChange = (event) => {
     setNewName(event.target.value);
+  };
+
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value);
   };
 
   console.log("persons array; ", persons);
@@ -44,14 +54,19 @@ const App = () => {
           name: <input value={newName} onChange={handlePersonChange} />
         </div>
         <div>
+          number: <input value={newNumber} onChange={handleNumberChange} />
+        </div>
+        <div>
           <button type="submit">add</button>
         </div>
-        <div>debug: {newName}</div>
+        <div>debug: {newName} {newNumber}</div>
       </form>
       <h2>Numbers</h2>
       <ul>
         {persons.map((person) => (
-          <li key={person.id}>{person.name}</li>
+          <li key={person.id}>
+            {person.name} {person.number}
+          </li>
         ))}
       </ul>
     </div>

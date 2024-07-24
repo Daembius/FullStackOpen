@@ -6,7 +6,7 @@ import { useState } from "react";
 const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas", id: 0 }]);
   const [newName, setNewName] = useState("");
-  
+
   const [counter, setCounter] = useState(1);
 
   const addPerson = (event) => {
@@ -15,16 +15,26 @@ const App = () => {
       name: newName,
       id: counter,
     };
-    setCounter(counter + 1)
-    setPersons(persons.concat(personObject));
-    setNewName('');
+
+    if (
+      !persons.find(
+        (person) => person.name.toLowerCase() === newName.toLowerCase()
+      )
+    ) {
+      setPersons(persons.concat(personObject));
+      setNewName("");
+      setCounter(counter + 1);
+    } else {
+      alert(`${newName} is already added to phonebook`);
+      setNewName("");
+    }
   };
 
   const handlePersonChange = (event) => {
     setNewName(event.target.value);
   };
 
-  console.log('persons array; ', persons)
+  console.log("persons array; ", persons);
 
   return (
     <div>
@@ -40,9 +50,9 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map(person => 
-          <li key={person.id} >{person.name}</li>
-        )}
+        {persons.map((person) => (
+          <li key={person.id}>{person.name}</li>
+        ))}
       </ul>
     </div>
   );

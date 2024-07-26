@@ -3,6 +3,10 @@ import { useState } from "react";
 // import viteLogo from '/vite.svg'
 // import './App.css'
 
+import Persons from "./components/Persons";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: "Arto Hellas", number: "040-123456", id: 1 },
@@ -53,7 +57,6 @@ const App = () => {
   const handleSearchChange = (event) => {
     const searchTerm = event.target.value.toLowerCase();
     setNewSearch(searchTerm);
-    console.log("Search term: ", searchTerm);
   };
 
   console.log("persons array; ", persons);
@@ -61,32 +64,17 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      filter shown with{" "}
-      <input value={newSearch} onChange={handleSearchChange} />
-      <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handlePersonChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <ul>
-        {persons
-          .filter((person) =>
-            person.name.toLowerCase().includes(newSearch.toLowerCase())
-          )
-          .map((person) => (
-            <li key={person.id}>
-              {person.name} {person.number}
-            </li>
-          ))}
-      </ul>
+      <Filter newSearch={newSearch} handleSearchChange={handleSearchChange} />
+      <h3>add a new</h3>
+      <PersonForm
+        addPerson={addPerson}
+        newName={newName}
+        newNumber={newNumber}
+        handlePersonChange={handlePersonChange}
+        handleNumberChange={handleNumberChange}
+      />
+      <h3>Numbers</h3>
+      <Persons persons={persons} newSearch={newSearch} />
     </div>
   );
 };

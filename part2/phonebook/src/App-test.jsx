@@ -22,9 +22,12 @@ const App = () => {
         console.log('promise fulfilled')
         setPersons(response.data)
       })
+      .catch(error => {
+        console.error('Error fetching data:', error)
+      })
   }, [])
   console.log('render', persons.length, 'persons')
-
+  
   const addPerson = (event) => {
     event.preventDefault();
     if (newName.trim() === "" || newNumber.trim() === "") {
@@ -34,17 +37,18 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
-      id: persons.length > 0 ? Math.max(...persons.map((p) => p.id)) + 1 : 1,
     };
-
-    if (
-      !persons.find(
-        (person) => person.name.toLowerCase() === newName.toLowerCase()
-      )
-    ) {
-      setPersons(persons.concat(personObject));
-      setNewName("");
-      setNewNumber("");
+  
+    if (!persons.find(person => person.name.toLowerCase() === newName.toLowerCase())) {
+      axios.post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data));
+          setNewName("");
+          setNewNumber("");
+        })
+        .catch(error => {
+          console.error('Error adding person:', error)
+        });
     } else {
       alert(`${newName} is already added to phonebook`);
       setNewName("");

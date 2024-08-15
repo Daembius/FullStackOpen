@@ -24,8 +24,6 @@ const App = () => {
     const noteObject = {
       content: newNote,
       important: Math.random() > 0.5,
-      // NB: on the course's GitHub it's :
-      // important: Math.random() > 0.5,
       id: String(notes.length + 1),
     };
 

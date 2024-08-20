@@ -23,31 +23,35 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    if (newName.trim() === "" || newNumber.trim() === "") {
+    // Trim entry to avoid confusion between "name" and "name_"
+    const trimmedName = newName.trim();
+    const trimmedNumber = newNumber.trim();
+    if (trimmedName === "" || trimmedNumber === "") {
       alert("Name and number are required");
       return;
     }
     const personObject = {
-      name: newName,
-      number: newNumber,
+      name: trimmedName,
+      number: trimmedNumber,
     };
 
     const existingPerson = persons.find(
-      (person) => person.name.toLowerCase() === newName.toLocaleLowerCase()
+      (person) => person.name.toLowerCase() === trimmedName.toLocaleLowerCase()
     );
 
     if (existingPerson) {
-      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)) {
         personService
           .update(existingPerson.id, personObject)
           .then(returnedPerson => {
-            setPersons(persons.map(person => person.id !== existingPerson ? person : returnedPerson));
+            setPersons(persons.map(person => 
+              person.id === existingPerson.id ? returnedPerson : person
+            ));
             setNewName('');
             setNewNumber('');
           })
           .catch(error => {
             console.error('Error updating person:', error);
-            // error message
           });
       }
     } else {
@@ -60,30 +64,9 @@ const App = () => {
         })
         .catch(error => {
           console.error("Error adding person: ", error);
-          // error message
         });
     }
   };
-
-  //   if (
-  //     !persons.find(
-  //       (person) => person.name.toLowerCase() === newName.toLowerCase()
-  //     )
-  //   ) {
-  //     personService
-  //       .create(personObject)
-  //       .then(returnedPerson => {
-  //         setPersons(persons.concat(returnedPerson))
-  //         setNewName('');
-  //         setNewNumber('');
-  //       })
-    
-  //   } else {
-  //     alert(`${newName} is already added to phonebook`);
-  //     setNewName("");
-  //     setNewNumber("");
-  //   }
-  // };
 
   const deletePerson = (id, name) => {
     if (window.confirm(`Do you really want to delete ${name}?`)) {
@@ -94,7 +77,6 @@ const App = () => {
         })
         .catch(error => {
           console.error("Error deleting person:", error)
-          alert(`Cannot delete ${name}`);
         })
     }
   }

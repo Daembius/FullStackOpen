@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-// import './App.css'
-
 import Persons from "./components/Persons";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
@@ -23,17 +21,6 @@ const App = () => {
       })
   }, [])
 
-  // useEffect(() => {
-  //   console.log('effect')
-  //   axios
-  //     .get('http://localhost:3001/persons')
-  //     .then(response => {
-  //       console.log('promise fulfilled')
-  //       setPersons(response.data)
-  //     })
-  // }, [])
-  // console.log('render', persons.length, 'persons')
-
   const addPerson = (event) => {
     event.preventDefault();
     if (newName.trim() === "" || newNumber.trim() === "") {
@@ -45,25 +32,72 @@ const App = () => {
       number: newNumber,
     };
 
-    if (
-      !persons.find(
-        (person) => person.name.toLowerCase() === newName.toLowerCase()
-      )
-    ) {
+    const existingPerson = persons.find(
+      (person) => person.name.toLowerCase() === newName.toLocaleLowerCase()
+    );
+
+    if (existingPerson) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)) {
+        personService
+          .update(existingPerson.id, personObject)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== existingPerson ? person : returnedPerson));
+            setNewName('');
+            setNewNumber('');
+          })
+          .catch(error => {
+            console.error('Error updating person:', error);
+            // error message
+          });
+      }
+    } else {
       personService
         .create(personObject)
         .then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson))
+          setPersons(persons.concat(returnedPerson));
           setNewName('');
           setNewNumber('');
         })
-    
-    } else {
-      alert(`${newName} is already added to phonebook`);
-      setNewName("");
-      setNewNumber("");
+        .catch(error => {
+          console.error("Error adding person: ", error);
+          // error message
+        });
     }
   };
+
+  //   if (
+  //     !persons.find(
+  //       (person) => person.name.toLowerCase() === newName.toLowerCase()
+  //     )
+  //   ) {
+  //     personService
+  //       .create(personObject)
+  //       .then(returnedPerson => {
+  //         setPersons(persons.concat(returnedPerson))
+  //         setNewName('');
+  //         setNewNumber('');
+  //       })
+    
+  //   } else {
+  //     alert(`${newName} is already added to phonebook`);
+  //     setNewName("");
+  //     setNewNumber("");
+  //   }
+  // };
+
+  const deletePerson = (id, name) => {
+    if (window.confirm(`Do you really want to delete ${name}?`)) {
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+        .catch(error => {
+          console.error("Error deleting person:", error)
+          alert(`Cannot delete ${name}`);
+        })
+    }
+  }
 
   const handlePersonChange = (event) => {
     setNewName(event.target.value);
@@ -93,7 +127,8 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h3>Numbers</h3>
-      <Persons persons={persons} newSearch={newSearch} />
+      <Persons persons={persons} newSearch={newSearch} deletePerson={deletePerson} />
+      {/* <Persons persons={persons} newSearch={newSearch} /> */}
     </div>
   );
 };

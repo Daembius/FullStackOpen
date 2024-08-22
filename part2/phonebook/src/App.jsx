@@ -3,8 +3,11 @@ import axios from "axios";
 
 import Persons from "./components/Persons";
 import Filter from "./components/Filter";
+import Notification from "./components/Notification";
 import PersonForm from "./components/PersonForm";
 import personService from './services/persons'
+
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,6 +15,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newSearch, setNewSearch] = useState("");
+
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -49,6 +54,10 @@ const App = () => {
             ));
             setNewName('');
             setNewNumber('');
+            setSuccessMessage(`Updated ${returnedPerson.name}'s number`);
+            setTimeout(() => {
+              setSuccessMessage(null);
+            }, 5000);
           })
           .catch(error => {
             console.error('Error updating person:', error);
@@ -61,6 +70,10 @@ const App = () => {
           setPersons(persons.concat(returnedPerson));
           setNewName('');
           setNewNumber('');
+          setSuccessMessage(`Added ${returnedPerson.name}`);
+          setTimeout(() => {
+            setSuccessMessage(null);
+          }, 5000);
         })
         .catch(error => {
           console.error("Error adding person: ", error);
@@ -74,6 +87,10 @@ const App = () => {
         .remove(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id))
+          setSuccessMessage(`Deleted ${name}`);
+          setTimeout(() => {
+            setSuccessMessage(null);
+          }, 5000);
         })
         .catch(error => {
           console.error("Error deleting person:", error)
@@ -108,6 +125,7 @@ const App = () => {
         handlePersonChange={handlePersonChange}
         handleNumberChange={handleNumberChange}
       />
+      <Notification message={successMessage} />
       <h3>Numbers</h3>
       <Persons persons={persons} newSearch={newSearch} deletePerson={deletePerson} />
       {/* <Persons persons={persons} newSearch={newSearch} /> */}

@@ -23,7 +23,7 @@ a:hover {
 }
 
 body {
-  margin: 0;
+  /* margin: 0; */
   display: flex;
   place-items: center;
   min-width: 320px;
@@ -65,4 +65,14 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.success {
+  color: brown;
+  background: lightgoldenrodyellow;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
 }

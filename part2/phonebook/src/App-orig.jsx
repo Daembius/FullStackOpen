@@ -17,7 +17,6 @@ const App = () => {
   const [newSearch, setNewSearch] = useState("");
 
   const [successMessage, setSuccessMessage] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -62,13 +61,6 @@ const App = () => {
           })
           .catch(error => {
             console.error('Error updating person:', error);
-            setErrorMessage(
-              `Information of '${existingPerson.name}' has already been removed from server`
-            );
-            setTimeout(() => {
-              setErrorMessage(null);
-            }, 5000);
-            setPersons(persons.filter(p => p.id !== existingPerson.id));
           });
       }
     } else {
@@ -85,12 +77,6 @@ const App = () => {
         })
         .catch(error => {
           console.error("Error adding person: ", error);
-          setErrorMessage(
-            `Failed to add ${personObject.name}. ${error.response?.data?.error || 'An error occurred.'}`
-          );
-          setTimeout(() => {
-            setErrorMessage(null);
-          }, 5000);
         });
     }
   };
@@ -100,24 +86,17 @@ const App = () => {
       personService
         .remove(id)
         .then(() => {
-          setPersons(prevPersons => prevPersons.filter(person => person.id !== id));
+          setPersons(persons.filter(person => person.id !== id))
           setSuccessMessage(`Deleted ${name}`);
           setTimeout(() => {
             setSuccessMessage(null);
           }, 5000);
         })
         .catch(error => {
-          console.error("Error deleting person:", error);
-          setErrorMessage(
-            `Information of '${name}' has already been removed from server`
-          );
-          setTimeout(() => {
-            setErrorMessage(null);
-          }, 5000);
-          setPersons(prevPersons => prevPersons.filter(person => person.id !== id));
-        });
+          console.error("Error deleting person:", error)
+        })
     }
-  };
+  }
 
   const handlePersonChange = (event) => {
     setNewName(event.target.value);
@@ -146,10 +125,10 @@ const App = () => {
         handlePersonChange={handlePersonChange}
         handleNumberChange={handleNumberChange}
       />
-      <Notification message={successMessage} type="success" />
-      <Notification message={errorMessage} type="error" />
+      <Notification message={successMessage} />
       <h3>Numbers</h3>
       <Persons persons={persons} newSearch={newSearch} deletePerson={deletePerson} />
+      {/* <Persons persons={persons} newSearch={newSearch} /> */}
     </div>
   );
 };

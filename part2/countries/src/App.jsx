@@ -4,7 +4,7 @@ import Notification from './components/Notification'
 import Countries from './components/Countries'
 import CountryDetail from './components/CountryDetail'
 
-// import './index.css'
+import './index.css'
 
 const App = () => {
   const [allCountries, setAllCountries] = useState([])

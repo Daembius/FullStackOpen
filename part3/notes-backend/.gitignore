@@ -13,5 +13,11 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
-# Do NOT ignore the dist folder for Render deployment
+# IDE/Editor folders
+.vscode/
+.idea/
+
+# Optional: include dist if you want it version controlled for Render deployment
 # dist/
+
+# Any other project-specific ignores

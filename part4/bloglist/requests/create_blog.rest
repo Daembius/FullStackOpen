@@ -7,3 +7,45 @@ Content-Type: application/json
     "url": "https://example.com/first-post",
     "likes": 5
 }
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Test Blog with Negative Likes",
+    "author": "Test Author",
+    "url": "example.com",
+    "likes": -5
+}
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Test Blog with Positive Likes",
+    "author": "Test Author",
+    "url": "example.com",
+    "likes": 3
+}
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Exploring Node.js",
+    "author": "Jane Smith",
+    "url": "https://example.com/nodejs-exploration",
+    "likes": 10
+}
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Untitled",
+    "author": "Anonymous"
+}

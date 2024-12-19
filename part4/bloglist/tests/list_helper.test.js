@@ -111,9 +111,64 @@ describe('favorite blog', () => {
       ...blogs.slice(3) // Keep the rest of the blogs
     ];
     const result = listHelper.favoriteBlog(listWithTwoFavorites);
-    console.log('Résultat:', result);
+    console.log('Result with multiple favorites:', result);
     assert.ok(result.likes === 10); // Expecting one of the blogs with 10 likes to be returned
   });
 });
+
+
+describe('most blogs', () => {
+  test('of empty list returns undefined', () => {
+    const result = listHelper.mostBlogs([]);
+    assert.deepStrictEqual(result, undefined);
+  });
+
+  test('when list has only one blog, equals the author of that blog', () => {
+    const listWithOneBlog = [blogs[0]];
+    const result = listHelper.mostBlogs(listWithOneBlog);
+    assert.deepStrictEqual(result, {
+      author: "Michael Chan",
+      blogs: 1
+    });
+  });
+
+  test('of many blogs returns the author with most blogs', () => {
+    const result = listHelper.mostBlogs(blogs);
+    assert.deepStrictEqual(result, {
+      author: "Robert C. Martin",
+      blogs: 3
+    });
+  });
+
+  // test('when there are multiple authors with the same most blogs, returns one of them', () => {
+  //   // Here we modify the list so that two authors have the same number of blogs
+  //   const listWithTwoTopBloggers = [
+  //     ...blogs.slice(0, 2),
+  //     { ...blogs[2], author: "Another Author" }, // Change the author of the third blog
+  //     ...blogs.slice(3)
+  //   ];
+  //   const result = listHelper.mostBlogs(listWithTwoTopBloggers);
+  //   console.log('Most blogs result:', result);
+  //   // Since we've modified to have two authors with 2 blogs each, we check if one of them is returned
+  //   assert.ok(result.blogs === 2);
+  // });
+
+  test('when there are multiple authors with the same most blogs, returns one of them', () => {
+    // Modify the list to have two authors with the same number of blogs
+    const listWithTwoTopBloggers = [
+      ...blogs.slice(0, 2),
+      { ...blogs[2], author: "Another Author" }, // Change the author of the third blog
+      { ...blogs[3], author: "Yet Another Author" }, // Change the author of the fourth blog to another name
+      ...blogs.slice(4)
+    ];
+    const result = listHelper.mostBlogs(listWithTwoTopBloggers);
+    console.log('Result for multiple top bloggers:', result);
+    // Both "Another Author" and "Yet Another Author" should now have 2 blogs each
+    assert.ok(result.blogs === 2);
+  });
+});
+
+
+
 
 

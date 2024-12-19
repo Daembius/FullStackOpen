@@ -36,9 +36,26 @@ const mostBlogs = (blogs) => {
   };
 };
 
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return undefined;
+
+  // Use lodash to group blogs by author and sum likes
+  const likesByAuthor = _.chain(blogs)
+    .groupBy('author')
+    .map((blogs, author) => ({
+      author,
+      likes: _.sumBy(blogs, 'likes')
+    }))
+    .value();
+
+  // Find the author with the most likes
+  return _.maxBy(likesByAuthor, 'likes');
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 };

@@ -86,7 +86,7 @@ describe('favorite blog', () => {
   test('when list has only one blog, returns that blog', () => {
     const listWithOneBlog = [blogs[0]];
     const result = listHelper.favoriteBlog(listWithOneBlog);
-    console.log('Result:', result);
+    console.log('Result with single blog list:', result);
     assert.deepStrictEqual(result, {
       title: "React patterns",
       author: "Michael Chan",
@@ -140,19 +140,6 @@ describe('most blogs', () => {
     });
   });
 
-  // test('when there are multiple authors with the same most blogs, returns one of them', () => {
-  //   // Here we modify the list so that two authors have the same number of blogs
-  //   const listWithTwoTopBloggers = [
-  //     ...blogs.slice(0, 2),
-  //     { ...blogs[2], author: "Another Author" }, // Change the author of the third blog
-  //     ...blogs.slice(3)
-  //   ];
-  //   const result = listHelper.mostBlogs(listWithTwoTopBloggers);
-  //   console.log('Most blogs result:', result);
-  //   // Since we've modified to have two authors with 2 blogs each, we check if one of them is returned
-  //   assert.ok(result.blogs === 2);
-  // });
-
   test('when there are multiple authors with the same most blogs, returns one of them', () => {
     // Modify the list to have two authors with the same number of blogs
     const listWithTwoTopBloggers = [
@@ -165,6 +152,45 @@ describe('most blogs', () => {
     console.log('Result for multiple top bloggers:', result);
     // Both "Another Author" and "Yet Another Author" should now have 2 blogs each
     assert.ok(result.blogs === 2);
+  });
+});
+
+
+
+describe('most likes', () => {
+  test('of empty list returns undefined', () => {
+    const result = listHelper.mostLikes([]);
+    assert.deepStrictEqual(result, undefined);
+  });
+
+  test('when list has only one blog, equals the likes of that blog', () => {
+    const listWithOneBlog = [blogs[0]];
+    const result = listHelper.mostLikes(listWithOneBlog);
+    assert.deepStrictEqual(result, {
+      author: "Michael Chan",
+      likes: 7
+    });
+  });
+
+  test('of many blogs returns the author with most likes', () => {
+    const result = listHelper.mostLikes(blogs);
+    assert.deepStrictEqual(result, {
+      author: "Edsger W. Dijkstra",
+      likes: 17  // Sum of likes for Edsger W. Dijkstra's blogs (5 + 12)
+    });
+  });
+
+  test('when there are multiple authors with the same most likes, returns one of them', () => {
+    // Modify the list so that two authors have the same number of total likes
+    const listWithTwoTopLiked = [
+      ...blogs.slice(0, 2),
+      { ...blogs[2], author: "Another Author", likes: 5 }, // Change author and likes for third blog
+      { ...blogs[3], author: "Another Author", likes: 12 }, // Change author and likes for fourth blog
+      ...blogs.slice(4)
+    ];
+    const result = listHelper.mostLikes(listWithTwoTopLiked);
+    console.log('Result with multiple authors with the same most likes:', result);
+    assert.ok(result.likes === 17); // Both "Another Author" and "Edsger W. Dijkstra" should have 17 likes now
   });
 });
 

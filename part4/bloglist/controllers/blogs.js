@@ -1,5 +1,6 @@
 const Blog = require('../models/blog')
 const logger = require('../utils/logger')
+const mongoose = require('mongoose')
 
 const getBlogs = async (request, response) => {
   try {
@@ -15,12 +16,10 @@ const createBlog = async (request, response) => {
   try {
     const blog = new Blog(request.body)
 
-    // Check if title or url is missing
     if (!blog.title || !blog.url) {
       return response.status(400).json({ error: 'Title or URL is missing' })
     }
 
-    // Handle likes defaulting to 0 if not provided
     if (!blog.likes) {
       blog.likes = 0
     }
@@ -33,7 +32,47 @@ const createBlog = async (request, response) => {
   }
 }
 
+const deleteBlog = async (request, response) => {
+  try {
+    const blogId = request.params.id
+    logger.info('Attempting to delete blog with ID:', blogId)
+
+    // Validate ObjectId format here if needed
+    if (!mongoose.Types.ObjectId.isValid(blogId)) {
+      return response.status(400).json({ error: 'Invalid blog ID format' })
+    }
+
+    const blog = await Blog.findOneAndDelete({ _id: blogId })
+    if (blog) {
+      logger.info('Blog deleted successfully:', blog)
+      response.status(204).end()
+    } else {
+      logger.info('Blog not found for ID:', blogId)
+      response.status(404).json({ error: 'Blog not found' })
+    }
+  } catch (error) {
+    logger.error('Error deleting blog:', error)
+    response.status(400).json({ error: 'Failed to delete blog' })
+  }
+}
+
+// const deleteBlog = async (request, response) => {
+//   try {
+//     const blog = await Blog.findByIdAndRemove(request.params.id)
+
+//     if (blog) {
+//       response.status(204).end() // No content to return on successful delete
+//     } else {
+//       response.status(404).json({ error: 'Blog not found' })
+//     }
+//   } catch (error) {
+//     logger.error('Error deleting blog:', error);
+//     response.status(400).json({ error: 'Invalid blog ID' });
+//   }
+// }
+
 module.exports = {
   getBlogs,
   createBlog,
+  deleteBlog,
 }

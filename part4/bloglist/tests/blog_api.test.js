@@ -110,6 +110,29 @@ test('backend responds with 400 if url is missing', async () => {
   await api.post('/api/blogs').send(newBlog).expect(400)
 })
 
+// ... previous tests ...
+
+test('a blog can be deleted', async () => {
+  const blogsAtStart = await Blog.find({})
+
+  const blogToDelete = blogsAtStart[0]
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+  const blogsAtEnd = await Blog.find({})
+  assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
+
+  const contents = blogsAtEnd.map((r) => r.title)
+  assert.ok(
+    !contents.includes(blogToDelete.title),
+    'the deleted blog should not be in the list'
+  )
+})
+
+test('returns 404 when trying to delete a non-existent blog', async () => {
+  const nonExistentId = '5e9f8f8f8f8f8f8f8f8f8f8f' // An ID that doesn't exist
+  await api.delete(`/api/blogs/${nonExistentId}`).expect(404)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })

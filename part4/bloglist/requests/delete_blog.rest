@@ -1,0 +1,7 @@
+### Delete a blog by ID - 
+DELETE http://localhost:3001/api/blogs/677782af624d323521c5af45
+Content-Type: application/json
+
+### Delete a non-existent blog - This should return 404
+DELETE http://localhost:3001/api/blogs/5e9f8f8f8f8f8f8f8f8f8f8f
+Content-Type: application/json

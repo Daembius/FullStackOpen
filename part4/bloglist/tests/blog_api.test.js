@@ -90,6 +90,26 @@ test('likes default to 0 when missing from new blog', async () => {
   assert.strictEqual(savedBlog.likes, 0, 'likes should default to 0')
 })
 
+test('backend responds with 400 if title is missing', async () => {
+  const newBlog = {
+    author: 'Test Author',
+    url: 'test-url.com',
+    likes: 7,
+  }
+
+  await api.post('/api/blogs').send(newBlog).expect(400)
+})
+
+test('backend responds with 400 if url is missing', async () => {
+  const newBlog = {
+    title: 'Test Blog',
+    author: 'Test Author',
+    likes: 7,
+  }
+
+  await api.post('/api/blogs').send(newBlog).expect(400)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })

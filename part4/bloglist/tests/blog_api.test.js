@@ -51,7 +51,6 @@ test('a new blog can be added via POST', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  // Here we use postResponse to check the returned data
   const createdBlog = postResponse.body
   assert.ok(
     createdBlog.id !== undefined,
@@ -110,8 +109,6 @@ test('backend responds with 400 if url is missing', async () => {
   await api.post('/api/blogs').send(newBlog).expect(400)
 })
 
-// ... previous tests ...
-
 test('a blog can be deleted', async () => {
   const blogsAtStart = await Blog.find({})
 
@@ -131,6 +128,35 @@ test('a blog can be deleted', async () => {
 test('returns 404 when trying to delete a non-existent blog', async () => {
   const nonExistentId = '5e9f8f8f8f8f8f8f8f8f8f8f' // An ID that doesn't exist
   await api.delete(`/api/blogs/${nonExistentId}`).expect(404)
+})
+
+test('a blog can be updated', async () => {
+  const blogsAtStart = await Blog.find({})
+
+  const blogToUpdate = blogsAtStart[0]
+  const updatedLikes = blogToUpdate.likes + 1
+
+  const response = await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send({ likes: updatedLikes })
+    .expect(200)
+
+  const updatedBlog = response.body
+  assert.strictEqual(updatedBlog.likes, updatedLikes)
+
+  const blogsAtEnd = await Blog.find({})
+  assert.strictEqual(blogsAtEnd.length, blogsAtStart.length)
+
+  const contents = blogsAtEnd.map((r) => r.likes)
+  assert.ok(
+    contents.includes(updatedLikes),
+    'updated likes should be in the list'
+  )
+})
+
+test('returns 404 when trying to update a non-existent blog', async () => {
+  const nonExistentId = '5e9f8f8f8f8f8f8f8f8f8f8f' // An ID that doesn't exist
+  await api.put(`/api/blogs/${nonExistentId}`).send({ likes: 10 }).expect(404)
 })
 
 after(async () => {

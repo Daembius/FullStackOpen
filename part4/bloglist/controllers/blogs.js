@@ -56,23 +56,36 @@ const deleteBlog = async (request, response) => {
   }
 }
 
-// const deleteBlog = async (request, response) => {
-//   try {
-//     const blog = await Blog.findByIdAndRemove(request.params.id)
+const updateBlog = async (request, response) => {
+  try {
+    const blogId = request.params.id
+    logger.info('Attempting to update blog with ID:', blogId)
 
-//     if (blog) {
-//       response.status(204).end() // No content to return on successful delete
-//     } else {
-//       response.status(404).json({ error: 'Blog not found' })
-//     }
-//   } catch (error) {
-//     logger.error('Error deleting blog:', error);
-//     response.status(400).json({ error: 'Invalid blog ID' });
-//   }
-// }
+    if (!mongoose.Types.ObjectId.isValid(blogId)) {
+      return response.status(400).json({ error: 'Invalid blog ID format' })
+    }
+
+    const blog = await Blog.findById(blogId)
+
+    if (!blog) {
+      return response.status(404).json({ error: 'Blog not found' })
+    }
+
+    // Update only the likes, you can extend this to update other fields if needed
+    blog.likes = request.body.likes || blog.likes // If likes not provided, keep the existing value
+
+    const updatedBlog = await blog.save()
+    logger.info('Blog updated successfully:', updatedBlog)
+    response.json(updatedBlog)
+  } catch (error) {
+    logger.error('Error updating blog:', error)
+    response.status(400).json({ error: 'Failed to update blog' })
+  }
+}
 
 module.exports = {
   getBlogs,
   createBlog,
   deleteBlog,
+  updateBlog,
 }

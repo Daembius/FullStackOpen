@@ -1,0 +1,7 @@
+### Update the likes for a blog
+PUT http://localhost:3001/api/blogs/6777da831dc135437024314e
+Content-Type: application/json
+
+{
+  "likes": 27
+}

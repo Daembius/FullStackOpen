@@ -9,6 +9,10 @@ const blogSchema = new mongoose.Schema({
     default: 0,
     min: 0,
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 })
 
 // Transform the returned object to remove __v and modify _id

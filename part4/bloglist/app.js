@@ -4,6 +4,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
 const blogsRouter = require('./routes/blogs')
+const usersRouter = require('./controllers/users')
 const logger = require('./utils/logger')
 const morgan = require('morgan')
 
@@ -27,5 +28,6 @@ connectToDatabase()
 
 // Routes
 app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
 
 module.exports = app

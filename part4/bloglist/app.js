@@ -7,6 +7,7 @@ const blogsRouter = require('./routes/blogs')
 const usersRouter = require('./controllers/users')
 const logger = require('./utils/logger')
 const morgan = require('morgan')
+const middleware = require('./utils/middleware')
 
 // Middleware
 app.use(cors())
@@ -29,5 +30,8 @@ connectToDatabase()
 // Routes
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
+
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
 module.exports = app
